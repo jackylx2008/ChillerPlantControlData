@@ -1,0 +1,17 @@
+app:
+  log_level: ${LOG_LEVEL:-INFO}
+  input_path: ${INPUT_PATH:-data/input}
+  output_dir: ${OUTPUT_DIR:-output}
+  log_dir: ${LOG_DIR:-log}
+  default_entry: ${DEFAULT_ENTRY:-report}
+
+flows:
+  clean:
+    source_glob: "${CLEAN_SOURCE_GLOB:-*.csv}"
+    timezone: ${CLEAN_TIMEZONE:-Asia/Shanghai}
+  report:
+    source_glob: "${REPORT_SOURCE_GLOB:-*.csv}"
+    report_name: ${REPORT_NAME:-daily-summary}
+  display:
+    source_glob: "${DISPLAY_SOURCE_GLOB:-*.csv}"
+    display_mode: ${DISPLAY_MODE:-table}
