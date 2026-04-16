@@ -1,4 +1,11 @@
-"""Configuration loading with env-file injection and ${VAR:-default} expansion."""
+"""配置加载模块。
+
+使用说明:
+- 负责读取项目根目录下的 `config.yaml`。
+- 如果存在 `common.env`，会先加载其中的环境变量。
+- 支持解析 `${ENV_VAR:-default}` 形式的配置占位符。
+- 典型调用位置: `entries/_shared.py` 中的 `run_entry()`。
+"""
 
 from __future__ import annotations
 
@@ -48,4 +55,3 @@ def load_config(
     if not isinstance(data, dict):
         raise ValueError(f"Config root must be a mapping: {config_path}")
     return data
-

@@ -1,3 +1,11 @@
+"""指标汇总模块。
+
+使用说明:
+- 提供数值字段的分组统计能力，如 count、avg、min、max。
+- 主要由 `report_flow.py` 调用。
+- 不直接运行本文件。
+"""
+
 from __future__ import annotations
 
 from collections import defaultdict
@@ -35,4 +43,3 @@ def summarize_numeric_fields(records: list[dict[str, Any]], numeric_fields: list
             row[f"{field}_max"] = round(max(values), 3) if values else None
         summaries.append(row)
     return summaries
-

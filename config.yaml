@@ -1,17 +1,30 @@
 app:
   log_level: ${LOG_LEVEL:-INFO}
-  input_path: ${INPUT_PATH:-data/input}
+  input_path: ${INPUT_PATH:-data/sample}
   output_dir: ${OUTPUT_DIR:-output}
   log_dir: ${LOG_DIR:-log}
-  default_entry: ${DEFAULT_ENTRY:-report}
+  default_entry: ${DEFAULT_ENTRY:-generate_report}
 
 flows:
-  clean:
+  clean_data:
     source_glob: "${CLEAN_SOURCE_GLOB:-*.csv}"
     timezone: ${CLEAN_TIMEZONE:-Asia/Shanghai}
-  report:
+    trim_whitespace: true
+    drop_empty_rows: true
+    deduplicate: true
+  generate_report:
     source_glob: "${REPORT_SOURCE_GLOB:-*.csv}"
     report_name: ${REPORT_NAME:-daily-summary}
-  display:
+    time_field: ${REPORT_TIME_FIELD:-timestamp}
+    group_by: ${REPORT_GROUP_BY:-day}
+    numeric_fields:
+      - chiller_load
+      - chilled_water_temp_in
+      - chilled_water_temp_out
+      - condenser_water_temp_in
+      - condenser_water_temp_out
+      - power_kw
+  export_views:
     source_glob: "${DISPLAY_SOURCE_GLOB:-*.csv}"
     display_mode: ${DISPLAY_MODE:-table}
+    table_limit: ${DISPLAY_TABLE_LIMIT:-20}

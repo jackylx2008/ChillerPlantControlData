@@ -1,3 +1,11 @@
+"""数据清洗基础模块。
+
+使用说明:
+- 提供通用的数据值清洗、空行删除和重复数据去除能力。
+- 由 `clean_data_flow.py`、`report_flow.py`、`export_views_flow.py` 调用。
+- 不直接运行本文件。
+"""
+
 from __future__ import annotations
 
 from typing import Any
@@ -35,4 +43,3 @@ def clean_records(
         cleaned_rows.append(cleaned)
 
     return cleaned_rows
-

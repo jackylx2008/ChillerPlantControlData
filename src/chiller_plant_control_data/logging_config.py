@@ -1,4 +1,11 @@
-"""Centralized logging setup for the project."""
+"""统一日志模块。
+
+使用说明:
+- 提供项目统一的日志初始化和 `logger` 获取能力。
+- 入口脚本启动时调用 `setup_logger()`。
+- 其他模块通过 `get_logger(__name__)` 获取日志对象。
+- 不直接运行本文件。
+"""
 
 from __future__ import annotations
 
@@ -50,4 +57,3 @@ def setup_logger(
 def get_logger(name: str) -> logging.Logger:
     """Return a named logger using the shared logging setup."""
     return logging.getLogger(name)
-

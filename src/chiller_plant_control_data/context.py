@@ -1,4 +1,10 @@
-"""Shared runtime context for entries, flows, and modules."""
+"""运行上下文模块。
+
+使用说明:
+- 提供 `AppContext`，在入口层、编排层、基础模块之间共享配置和路径。
+- 入口脚本通常通过 `build_context()` 创建上下文对象。
+- 不直接运行本文件。
+"""
 
 from __future__ import annotations
 
@@ -24,6 +30,10 @@ class AppContext:
     @property
     def flows_config(self) -> dict[str, Any]:
         return self.config.get("flows", {})
+
+    @property
+    def entry_flow_config(self) -> dict[str, Any]:
+        return self.flows_config.get(self.entry_name, {})
 
     @property
     def input_path(self) -> Path:
@@ -62,4 +72,3 @@ def build_context(
         logger_name=metadata.pop("logger_name", None),
         metadata=metadata,
     )
-

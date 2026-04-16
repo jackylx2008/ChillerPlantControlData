@@ -1,33 +1,31 @@
+"""入口共享启动模块。
+
+使用说明:
+- 提供 `run_entry()`，负责统一完成配置加载、上下文创建、日志初始化和 flow 调用。
+- `entries/` 下的各入口脚本都会调用这里的方法。
+- 不单独运行本文件。
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
 from typing import Callable
 
 from chiller_plant_control_data.config_loader import load_config
-from chiller_plant_control_data.context import AppContext
+from chiller_plant_control_data.context import AppContext, build_context
 from chiller_plant_control_data.logging_config import get_logger, setup_logger
-from chiller_plant_control_data.modules.path_utils import ensure_directory
 
 
 def run_entry(entry_name: str, flow_runner: Callable[[AppContext], dict[str, object]]) -> dict[str, object]:
     project_root = Path.cwd()
     config = load_config(project_root / "config.yaml", project_root / "common.env")
-
-    output_dir = ensure_directory(project_root / config.get("app", {}).get("output_dir", "output"))
-    log_dir = ensure_directory(project_root / "log")
+    context = build_context(config=config, entry_name=entry_name, project_root=project_root)
+    context.ensure_runtime_dirs()
 
     setup_logger(
         log_level=config.get("app", {}).get("log_level", "INFO"),
-        log_dir=log_dir,
-        log_name=entry_name,
-    )
-
-    context = AppContext(
-        project_root=project_root,
-        config=config,
-        entry_name=entry_name,
-        output_dir=output_dir,
-        log_dir=log_dir,
+        log_dir=context.log_dir,
+        log_file_name=f"{entry_name}.log",
     )
 
     logger = get_logger(__name__)
@@ -35,4 +33,3 @@ def run_entry(entry_name: str, flow_runner: Callable[[AppContext], dict[str, obj
     result = flow_runner(context)
     logger.info("Entry finished: %s", result)
     return result
-

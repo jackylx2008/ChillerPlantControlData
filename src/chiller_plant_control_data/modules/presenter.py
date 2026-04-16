@@ -1,3 +1,11 @@
+"""展示输出模块。
+
+使用说明:
+- 提供表格预览格式化和 JSON 写出能力。
+- 主要由 `export_views_flow.py` 和 `report_flow.py` 调用。
+- 不直接运行本文件。
+"""
+
 from __future__ import annotations
 
 import json
@@ -29,4 +37,3 @@ def write_json(file_path: Path | str, payload: Any) -> None:
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-
