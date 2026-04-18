@@ -1,7 +1,7 @@
 """数据清洗基础模块。
 
 使用说明:
-- 提供通用的数据值清洗、空行删除和重复数据去除能力。
+- 提供通用的数据值清洗、空行删除、异常状态过滤和重复数据去除能力。
 - 由 `clean_data_flow.py`、`report_flow.py`、`export_views_flow.py` 调用。
 - 不直接运行本文件。
 """
@@ -30,6 +30,9 @@ def clean_records(
 
     for record in records:
         cleaned = {key: _clean_value(value, trim_whitespace=trim_whitespace) for key, value in record.items()}
+
+        if any(str(value).strip() == "Bad Status" for value in cleaned.values() if value is not None):
+            continue
 
         if drop_empty_rows and all(value in (None, "") for value in cleaned.values()):
             continue
