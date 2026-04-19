@@ -9,17 +9,21 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable
 
 from chiller_plant_control_data.config_loader import load_config
 from chiller_plant_control_data.context import AppContext, build_context
 from chiller_plant_control_data.logging_config import get_logger, setup_logger
 
 
-def run_entry(entry_name: str, flow_runner: Callable[[AppContext], dict[str, object]]) -> dict[str, object]:
+def run_entry(
+    entry_name: str,
+    flow_runner: Callable[[AppContext], dict[str, object]],
+    **metadata: Any,
+) -> dict[str, object]:
     project_root = Path.cwd()
     config = load_config(project_root / "config.yaml", project_root / "common.env")
-    context = build_context(config=config, entry_name=entry_name, project_root=project_root)
+    context = build_context(config=config, entry_name=entry_name, project_root=project_root, **metadata)
     context.ensure_runtime_dirs()
 
     setup_logger(

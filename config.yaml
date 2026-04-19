@@ -3,7 +3,7 @@ app:
   input_path: ${INPUT_PATH:-data/sample}
   output_dir: ${OUTPUT_DIR:-output}
   log_dir: ${LOG_DIR:-log}
-  default_entry: ${DEFAULT_ENTRY:-generate_report}
+  default_entry: ${DEFAULT_ENTRY:-generate_charts}
 
 flows:
   clean_data:
@@ -28,3 +28,14 @@ flows:
     source_glob: "${DISPLAY_SOURCE_GLOB:-*.csv}"
     display_mode: ${DISPLAY_MODE:-table}
     table_limit: ${DISPLAY_TABLE_LIMIT:-20}
+  generate_charts:
+    cleaned_dir: ${CHART_CLEANED_DIR:-output/cleaned}
+    file_glob: "${CHART_FILE_GLOB:-cleaned_*.csv}"
+    keyword: ${CHART_KEYWORD:-总供水温度}
+    period_type: ${CHART_PERIOD_TYPE:-day}
+    target_date: ${CHART_TARGET_DATE:-2025-09-27}
+    target_month: ${CHART_TARGET_MONTH:-2025-09}
+    timestamp_field: ${CHART_TIMESTAMP_FIELD:-timestamp}
+    field_labels:
+      datavalue_(deg_c): 温度°C
+      datavalue_(%rh): 相对湿度
